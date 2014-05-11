@@ -75,15 +75,46 @@ function eachGeoObject(geodata, demodata, cb, o) {
   });
 }
 
+var renderBubbleText;
+
+var colors = {
+  WAT: "blue"
+ ,STCG: "yellow"
+ ,NG: "red"
+};
+
+function colorIcon(color) {
+  return new L.DivIcon({ className: 'icon-' + color });
+}
+
+function addStationMarker(group, row) {
+  L.marker([row._lat, row._lng],
+    { icon: colorIcon(colors[row._PriFuel] || 'grey') })
+    .bindPopup(renderBubbleText(row))
+    .addTo(group);
+}
 
 $(document).ready(function() {
-  var render = _.template($('#tpl').html());
+  var map = L.map('map', { });
+
+  map.setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://a.tiles.mapbox.com/v3/ezheidtmann.i6nb1fon/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  var markers = new L.FeatureGroup().addTo(map);
+
+  renderBubbleText = _.template($('#tpl').html());
   $.when($.ajax('latlng.json'), $.ajax('demo.json')).then(function(geo, demo) {
     eachGeoObject(geo[0], demo[0], function(row) {
-      // Render to template! yay!
-      $('#info').append(render(row));
+      if (row._lat && row._lng) {
+        addStationMarker(markers, row);
+      }
     });
 
+    map.fitBounds(markers.getBounds().pad(0.5));
   });
 });
 

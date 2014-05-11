@@ -1,6 +1,25 @@
 <!doctype html>
 <html>
 <head>
+<style>
+.leaflet-marker-icon {
+  border-radius: 50px;
+}
+
+.icon-grey {
+  background: gray;
+}
+
+.icon-blue {
+  background: blue;
+}
+
+.icon-yellow {
+  background: yellow;
+}
+
+.icon-red { background: red; }
+</style>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -8,26 +27,26 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 
 <script src="http://underscorejs.org/underscore-min.js"></script>
 <script src="demo.js"></script>
 <script language="x-tpl" id="tpl">
-  <div class="col-md-3">
     Name: <%= _Namem %> <br />
-    <!--
     Tech: <%= _TECH %><br />
     PID: <%= _PID %><br />
     PriFuel: <%= _PriFuel %><br />
     AltFuel: <%= _AltFuel %><br />
     RES: <%= _RES %>
-    -->
     geo: <%= _lat %>,<%= _lng %>
-  </div>
 </script>
 </head>
 <body>
   <div class="container">
     <div id="info" class="row">
+    </div>
+    <div id="map" class="col-md-12" style="height: 400px">
     </div>
   </div>
 
