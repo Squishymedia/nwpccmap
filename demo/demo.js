@@ -76,6 +76,8 @@ function eachGeoObject(geodata, demodata, cb, o) {
 }
 
 var renderBubbleText;
+var renderFacetBlock;
+var renderDetailsText;
 
 var colors = {
   WAT: "blue"
@@ -91,6 +93,9 @@ function addStationMarker(group, row) {
   L.marker([row._lat, row._lng],
     { icon: colorIcon(colors[row._PriFuel] || 'grey') })
     .bindPopup(renderBubbleText(row))
+    .on('click', function(ev) {
+      $('#details').html(renderDetailsText(row));
+    })
     .addTo(group);
 }
 
@@ -143,7 +148,6 @@ function facetFilter() {
   return filter;
 }
 
-var renderFacetBlock;
 var allRows;
 var markers;
 
@@ -169,6 +173,7 @@ $(document).ready(function() {
 
   renderBubbleText = _.template($('#tplBubbleText').html());
   renderFacetBlock = _.template($('#tplFacetBlock').html());
+  renderDetailsText = _.template($('#tplDetailsText').html());
 
   $.when($.ajax('latlng.json'), $.ajax('demo.json')).then(function(geo, demo) {
     var rows = [];
