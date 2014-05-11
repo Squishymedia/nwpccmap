@@ -94,6 +94,67 @@ function addStationMarker(group, row) {
     .addTo(group);
 }
 
+var facets = {};
+facets.resource = {
+  name: "Resource"
+ ,key: '_RES'
+ ,items: {}
+};
+
+facets.primary_fuel = {
+  name: "Primary Fuel"
+ ,key: '_PriFuel'
+ ,items: {}
+};
+
+function buildFacets(rows) {
+  _.each(facets, function(f) {
+    f.items = _.countBy(rows, f.key);
+    // TODO: augment with display names for facet titles
+  });
+
+  return facets;
+}
+
+function facetFilter() {
+  var facetStates = _.map($('#facets').find('input'), function(elem) {
+    var name = elem.name;
+    var parts = name.split('__');
+    return {
+      key: parts[0]
+     ,value: parts[1]
+     ,state: elem.checked
+    };
+  });
+
+  var any_checked = _.some(facetStates, function(fs) { return fs.state; });
+
+  if (any_checked) {
+    var filter = function(row) {
+      return _.some(facetStates, function(fs) {
+        return (fs.state && row[fs.key] && row[fs.key] == fs.value);
+      });
+    };
+  }
+  else {
+    var filter = _.constant(true);
+  }
+
+  return filter;
+}
+
+var renderFacetBlock;
+var allRows;
+var markers;
+
+function redrawMarkers() {
+  var rows = _.filter(allRows, facetFilter());
+  markers.clearLayers();
+  _.each(rows, function(row) {
+    addStationMarker(markers, row);
+  });
+}
+
 $(document).ready(function() {
   var map = L.map('map', { });
 
@@ -104,17 +165,32 @@ $(document).ready(function() {
     maxZoom: 18
   }).addTo(map);
 
-  var markers = new L.FeatureGroup().addTo(map);
+  markers = new L.FeatureGroup().addTo(map);
 
-  renderBubbleText = _.template($('#tpl').html());
+  renderBubbleText = _.template($('#tplBubbleText').html());
+  renderFacetBlock = _.template($('#tplFacetBlock').html());
+
   $.when($.ajax('latlng.json'), $.ajax('demo.json')).then(function(geo, demo) {
+    var rows = [];
     eachGeoObject(geo[0], demo[0], function(row) {
       if (row._lat && row._lng) {
-        addStationMarker(markers, row);
+        rows.push(row);
       }
     });
 
+    // facets
+    var facets = buildFacets(rows);
+    $('#facets').html(renderFacetBlock({ facets: facets }));
+
+    allRows = rows;
+
+    redrawMarkers();
+
     map.fitBounds(markers.getBounds().pad(0.5));
+
+    $('#facets').on('change', function() {
+      redrawMarkers();
+    });
   });
 });
 
