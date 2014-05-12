@@ -6,7 +6,7 @@ function normalizeTitlesByGuessing(res) {
     var machine_titles = _.first(res.data);
 
     // If first row contains any all-numeric cells, count it as a data row.
-    // Otherwise, count it as machine namse
+    // Otherwise, count it as machine name
     if (_.any(machine_titles, function(t) { return /^[.\d]+$/.test(t); })) {
       res.column_machine_names = res.column_names;
     }
