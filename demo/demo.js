@@ -175,7 +175,10 @@ $(document).ready(function() {
   renderFacetBlock = _.template($('#tplFacetBlock').html());
   renderDetailsText = _.template($('#tplDetailsText').html());
 
-  $.when($.ajax('latlng.json'), $.ajax('demo.json')).then(function(geo, demo) {
+  $.when(
+    $.ajax('http://sitka-stg.sqm.io/sets/3/current?format=json') // latlng
+   ,$.ajax('http://sitka-stg.sqm.io/sets/1/current?format=json') // "projects"
+  ).then(function(geo, demo) {
     var rows = [];
     eachGeoObject(geo[0], demo[0], function(row) {
       if (row._lat && row._lng) {
