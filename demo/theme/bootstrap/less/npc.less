@@ -69,6 +69,7 @@ a{
 .chosen-container{
 		z-index: 1000;
 		margin-bottom: 10px;
+		max-width: 100% !important;
 	}
 #facets{
 		max-height: 500px;
@@ -223,16 +224,31 @@ a.list-group-item{
 .leaflet-marker-icon {
   border-radius: 50px;
 }
-.icon-grey {
+.i-petroleum {
   background: @gray-light;
 }
-.icon-blue {
-  background: @brand-primary;
+.i-hydro{
+  background: @brand-info;
 }
-.icon-yellow {
+.i-solar {
   background: @brand-success;
 }
-.icon-red { 
+.i-coal { 
+	background: @brand-danger; 
+}
+.i-natural { 
+	background: @brand-primary; 
+}
+.i-wind { 
+	background: cadetblue; 
+}
+.i-biomass { 
+	background: pink; 
+}
+.i-geothermal { 
+	background: #fff; 
+}
+.i-uranium { 
 	background: @brand-warning; 
 }
 
