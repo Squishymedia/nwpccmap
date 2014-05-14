@@ -35,6 +35,9 @@ function eachRowObject(res, cb) {
       obj['_' + col_name] = val;
     });
 
+    obj.original = res;
+    obj.cells = cells;
+
     cb(obj);
   });
 }

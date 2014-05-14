@@ -57,55 +57,15 @@
     geo: <%= _lat %>,<%= _lng %>
 </script>
 <script language="x-underscore-tpl" id="tplDetailsText">
-  <pre>
   geo: <%= _lat %>,<%= _lng %>
-  Name:                           <%= _Namem %>
-  NWPCC Unit ID:                  <%= _NWPCCID %>
-  EIA (ORIS) Plant Code/Unit ID:  <%= _EIAGC %>
-  FERC Project ID:                <%= _PID %>
-  Technology:                     <%= _TECH %>
-  Primary Fuel:                   <%= _PriFuel %>
-  Alternate Fuel:                 <%= _AltFuel %>
-  Resource Type:                  <%= _RES %>
-  Nameplate Capacity (MW):        <%= _NCap %>
-  White Book Jan 1-hr Cap (MW):   <%= _BPAJanMW %>
-  WECC Summer Capacity (MW):      <%= _WECC_SMW %>
-  WECC Winter Capacity (MW):      <%= _WECC_WMW %>
-  EIA Summer Capacity (MW):       <%= _EIA_SMW %>
-  EIA Winter Capacity (MW):       <%= _EIA_WMW %>
-  Average Energy (MWa):           <%= _MWa %>
-  Firm Hydro Energy (MWa):        <%= _CMWa %>
-  Status:                         <%= _CSTAT %>
-  Service Month:                  <%= _SMO %>
-  Initial Service Year:           <%= _SYEAR %>
-  Retirement/Idled Year:          <%= _RDATE %>
-  Site:                           <%= _LOC %>
-  County:                         <%= _COUNTY %>
-  State:                          <%= _STATE %>
-  Power Act Region (Y/N):         <%= _RCODE %>
-  Basin:                          <%= _Basin %>
-  NERC Reliability Region:        <%= _NERC %>
-  Owner:                          <%= _ONAME %>
-  Owner Type:                     <%= _OTYPE %>
-  Electrical Load:                <%= _LOAD %>
-  Thermal Host (Cogeneration):    <%= _HOST %>
-  Thermal Load (Cogeneration):    <%= _THRM_LOAD %>
-  Gas Pipeline Interconnection:   <%= _Gas_Intercon %>
-  Main Grid Interconnection:      <%= _Elec_Intercon %>
-  Balancing Authority:            <%= _BA %>
-  2002 Energy (MWa):              <%= _2002MWa %>
-  2003 Energy (MWa):              <%= _2003MWa %>
-  2004 Energy (MWa):              <%= _2004MWa %>
-  2005 Energy (MWa):              <%= _2005MWa %>
-  2006 Energy (MWa):              <%= _2006MWa %>
-  2007 Energy (MWa):              <%= _2007MWa %>
-  2008 Energy (MWa):              <%= _2008MWa %>
-  2009 Energy (Mwa):              <%= _2009MWa %>
-  2010 Energy (Mwa):              <%= _2010MWa %>
-  2011 Energy (Mwa):              <%= _2011MWa %>
-  Notes:                          <%= _NOTES %>
-  2012-11-14 14:57:59             <%= _UPDATE %>
-  </pre>
+  <table>
+    <% _.each(cells, function(cell, i) { %>
+      <tr>
+        <td><%= original.column_names[i] %></td>
+        <td><%= cell %></td>
+      </tr>
+    <% }); %>
+  </table>
 </script>
 </head>
 <body>
