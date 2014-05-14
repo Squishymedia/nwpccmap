@@ -1,32 +1,17 @@
 <!doctype html>
 <html>
 <head>
-<style>
-.leaflet-marker-icon {
-  border-radius: 50px;
-}
-
-.icon-grey {
-  background: gray;
-}
-
-.icon-blue {
-  background: blue;
-}
-
-.icon-yellow {
-  background: yellow;
-}
-
-.icon-red { background: red; }
-</style>
-<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" href="theme/css/npc.css"/>
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="chosen/chosen.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="theme/js/jquery-ui.min.js"></script>
+<script src="theme/js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
 <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
@@ -59,6 +44,7 @@
     geo: <%= _lat %>,<%= _lng %>
 </script>
 <script language="x-underscore-tpl" id="tplDetailsText">
+  <div class="inner">
   geo: <%= _lat %>,<%= _lng %>
   <table>
     <% _.each(cells, function(cell, i) { %>
@@ -68,26 +54,27 @@
       </tr>
     <% }); %>
   </table>
+  </div>
 </script>
 </head>
 <body>
-  <div class="container">
+  <div class="container map">
     <div class="row">
-      <div class="col-md-9">
-        <div class="row">
-          <div id="map" class="col-md-12" style="height: 400px">
-          </div>
-        </div>
-        <div class="row">
-          <div id="details" class="col-md-12">
-          </div>
+      <div id="facetswrap" class="col-xs-3">
+        <div id="facets">
         </div>
       </div>
-      <select id="stations"></select>
-      <div id="facets" class="col-md-3">
+      <div class="stationsWrap col-xs-3 col-sm-offset-6 ">
+        <select id="stations">
+        </select> 
+        <div class="detailsWrap">
+          <div id="details">
+          </div>
+        </div>
       </div>
     </div>
+    <div id="map"  style="height: 100%;">
+    </div>
   </div>
-
 </body>
 </html>

@@ -209,7 +209,7 @@ $(document).ready(function() {
 
     $('#stations').chosen();
     
-    map.fitBounds(markers.getBounds().pad(0.5));
+    map.fitBounds(markers.getBounds().pad(0.1));
 
     $('#facets').on('change', function() {
       redrawMarkers();
