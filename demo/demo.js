@@ -82,21 +82,28 @@ var renderBubbleText;
 var renderFacetBlock;
 var renderDetailsText;
 
-var colors = {
-  WAT: "blue"
- ,STCG: "yellow"
- ,NG: "red"
-};
-
 var markerLookup = {};
 
-function colorIcon(color) {
-  return new L.DivIcon({ className: 'icon-' + color });
+var iconType = {};
+
+function slugify(text) {
+  // truncate at first space if applicable
+  if(text.indexOf(' ') > 0) { text = text.substr(0,text.indexOf(' ')) };
+  
+  text = text.toLowerCase();
+
+  text = text.replace(/[^a-z0-9 -]/g, ''); // remove invalid chars
+
+  return text;
+}
+
+function colorIcon(ptype) {
+  return new L.DivIcon({ className: 'i-' + ptype });
 }
 
 function addStationMarker(group, row) {
   var marker = L.marker([row._lat, row._lng],
-    { icon: colorIcon(colors[row._PriFuel] || 'grey') })
+    { icon: colorIcon(slugify(row._RES) || 'grey') })
     .bindPopup(renderBubbleText(row))
     .on('click', function(ev) {
       $('#details').html(renderDetailsText(row));
@@ -166,6 +173,7 @@ function redrawMarkers() {
     addStationMarker(markers, row);
     loadStationOpt(row); 
   });
+  $('#stations').trigger("chosen:updated");
 }
 
 function loadStationOpt(row) {
@@ -215,7 +223,7 @@ $(document).ready(function() {
       redrawMarkers();
     });
     
-    $('body').on('change', $('#stations'), function(){
+    $('#stations').on('change', function(){
       markerLookup[$('#stations').val()].fire('click').openPopup();
     });
   });
