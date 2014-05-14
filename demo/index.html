@@ -36,7 +36,7 @@
 <script src="demo.js"></script>
 <script language="x-underscore-tpl" id="tplFacetBlock">
   <% _.each(facets, function(f, id) { %>
-    <h3><%= f.name %></h3>
+    <h5><%= f.name %></h5>
     <ul>
       <% _.each(f.items, function(count, item) { %>
         <li>
@@ -74,6 +74,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-9">
+        <h2>Power Generation Map</h2>
         <div class="row">
           <div id="map" class="col-md-12" style="height: 400px">
           </div>
@@ -83,8 +84,13 @@
           </div>
         </div>
       </div>
-      <select id="stations"></select>
-      <div id="facets" class="col-md-3">
+      <div id="sidebar" class="col-md-3">
+        <p>These are the top power producers in each category and region.</p>
+        <h4>Search by name:</h3>
+        <select id="stations"></select>
+        <h4>or filter by:</h4>
+        <div id="facets">
+      </div>
       </div>
     </div>
   </div>
