@@ -88,18 +88,22 @@ var colors = {
  ,NG: "red"
 };
 
+var markerLookup = {};
+
 function colorIcon(color) {
   return new L.DivIcon({ className: 'icon-' + color });
 }
 
 function addStationMarker(group, row) {
-  L.marker([row._lat, row._lng],
+  var marker = L.marker([row._lat, row._lng],
     { icon: colorIcon(colors[row._PriFuel] || 'grey') })
     .bindPopup(renderBubbleText(row))
     .on('click', function(ev) {
       $('#details').html(renderDetailsText(row));
     })
     .addTo(group);
+    
+  markerLookup[row._NWPCCID] = marker;
 }
 
 var facets = {};
@@ -157,9 +161,15 @@ var markers;
 function redrawMarkers() {
   var rows = _.filter(allRows, facetFilter());
   markers.clearLayers();
+  $("#stations").empty();
   _.each(rows, function(row) {
     addStationMarker(markers, row);
+    loadStationOpt(row); 
   });
+}
+
+function loadStationOpt(row) {
+  $("#stations").append($("<option>").attr("value",row._NWPCCID).html(row._Namem));
 }
 
 $(document).ready(function() {
@@ -197,12 +207,20 @@ $(document).ready(function() {
 
     redrawMarkers();
 
+    $('#stations').chosen();
+    
     map.fitBounds(markers.getBounds().pad(0.5));
 
     $('#facets').on('change', function() {
       redrawMarkers();
     });
+    
+    $('body').on('change', $('#stations'), function(){
+      markerLookup[$('#stations').val()].fire('click').openPopup();
+    });
   });
+  
+  
 });
 
 })(jQuery);
