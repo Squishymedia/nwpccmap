@@ -176,8 +176,8 @@ $(document).ready(function() {
   renderDetailsText = _.template($('#tplDetailsText').html());
 
   $.when(
-    $.ajax('http://sitka-stg.sqm.io/sets/3/current?format=json') // latlng
-   ,$.ajax('http://sitka-stg.sqm.io/sets/1/current?format=json') // "projects"
+    $.ajax('http://npc.sqm.io/sets/3/current?format=json') // latlng
+   ,$.ajax('http://npc.sqm.io/sets/1/current?format=json') // "projects"
   ).then(function(geo, demo) {
     var rows = [];
     eachGeoObject(geo[0], demo[0], function(row) {
