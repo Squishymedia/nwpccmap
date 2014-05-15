@@ -44,16 +44,18 @@
     geo: <%= _lat %>,<%= _lng %>
 </script>
 <script language="x-underscore-tpl" id="tplDetailsText">
+  <a href="#" class="close-details">X</a>
   <div class="inner">
-  geo: <%= _lat %>,<%= _lng %>
-  <table>
-    <% _.each(cells, function(cell, i) { %>
-      <tr>
-        <td><%= original.column_names[i] %></td>
-        <td><%= cell %></td>
-      </tr>
-    <% }); %>
-  </table>
+  <h4>geo: <%= _lat %>,<%= _lng %></h4>
+  <!-- Table -->
+    <table class="table table-striped condensed">
+      <% _.each(cells, function(cell, i) { %>
+        <tr>
+          <td><%= original.column_names[i] %></td>
+          <td><%= cell %></td>
+        </tr>
+      <% }); %>
+    </table>
   </div>
 </script>
 </head>
@@ -71,7 +73,7 @@
         <div class="detailsWrap">
           <div id="details">
           </div>
-          <div class="well">
+          <div class="well note">
             <p>These are the top power producers in each category and region.</p>
             <p>Other formats: <a href="#">Google Earth, Excel, PDF</a></p>
           </div>
