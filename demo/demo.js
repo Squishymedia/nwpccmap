@@ -87,14 +87,19 @@ var markerLookup = {};
 var iconType = {};
 
 function slugify(text) {
-  // truncate at first space if applicable
-  if(text.indexOf(' ') > 0) { text = text.substr(0,text.indexOf(' ')) };
+  if (text) {
+    // truncate at first space if applicable
+    if(text.indexOf(' ') > 0) { text = text.substr(0,text.indexOf(' ')) };
+    
+    text = text.toLowerCase();
   
-  text = text.toLowerCase();
-
-  text = text.replace(/[^a-z0-9 -]/g, ''); // remove invalid chars
-
-  return text;
+    text = text.replace(/[^a-z0-9 -]/g, ''); // remove invalid chars
+  
+    return text;
+  }else{
+    return 'grey';
+  }
+  
 }
 
 function colorIcon(ptype) {
@@ -103,7 +108,7 @@ function colorIcon(ptype) {
 
 function addStationMarker(group, row) {
   var marker = L.marker([row._lat, row._lng],
-    { icon: colorIcon(slugify(row._RES) || 'grey') })
+    { icon: colorIcon(slugify(row._RES)) })
     .addTo(group);
     
   var popup = marker.bindPopup(renderBubbleText(row))
