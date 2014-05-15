@@ -104,12 +104,13 @@ function colorIcon(ptype) {
 function addStationMarker(group, row) {
   var marker = L.marker([row._lat, row._lng],
     { icon: colorIcon(slugify(row._RES) || 'grey') })
-    .bindPopup(renderBubbleText(row))
-    .on('click', function(ev) {
-      $('#details').html(renderDetailsText(row));
-    })
     .addTo(group);
     
+  var popup = marker.bindPopup(renderBubbleText(row))
+    .on('popupopen', function(ev) {
+      $('#details').html(renderDetailsText(row));
+    })
+        
   markerLookup[row._NWPCCID] = marker;
 }
 
@@ -180,6 +181,11 @@ function loadStationOpt(row) {
   $("#stations").append($("<option>").attr("value",row._NWPCCID).html(row._Namem));
 }
 
+function closeDetails() {
+  $('#details').html('');
+  
+}
+
 $(document).ready(function() {
   var map = L.map('map', { });
 
@@ -226,6 +232,8 @@ $(document).ready(function() {
     $('#stations').on('change', function(){
       markerLookup[$('#stations').val()].fire('click').openPopup();
     });
+    
+    map.on('popupclose', closeDetails);
   });
   
   
