@@ -78,6 +78,7 @@ function eachGeoObject(geodata, demodata, cb, o) {
   });
 }
 
+// placeholder for templates
 var renderBubbleText;
 var renderFacetBlock;
 var renderDetailsText;
@@ -86,6 +87,7 @@ var markerLookup = {};
 
 var iconType = {};
 
+// Convert multi word facets to friendly single phrase for CSS
 function slugify(text) {
   if (text) {
     // truncate at first space if applicable
@@ -132,6 +134,7 @@ facets.primary_fuel = {
  ,items: {}
 };
 
+// Groups resources by facets
 function buildFacets(rows) {
   _.each(facets, function(f) {
     f.items = _.countBy(rows, f.key);
@@ -141,6 +144,7 @@ function buildFacets(rows) {
   return facets;
 }
 
+// Manages drilldown by facets (resource type)
 function facetFilter() {
   var facetStates = _.map($('#facets').find('input'), function(elem) {
     var name = elem.name;
@@ -171,10 +175,11 @@ function facetFilter() {
 var allRows;
 var markers;
 
+// Redraw all map markers and repopulate chosen list; based on filters.
 function redrawMarkers() {
   var rows = _.filter(allRows, facetFilter());
   markers.clearLayers();
-  $("#stations").empty();
+  $('#stations').empty().append($('<option>').attr("value",0).html("Search for a station.."));
   _.each(rows, function(row) {
     addStationMarker(markers, row);
     loadStationOpt(row); 
@@ -182,19 +187,23 @@ function redrawMarkers() {
   $('#stations').trigger("chosen:updated");
 }
 
+// Populate chosen list
 function loadStationOpt(row) {
-  $("#stations").append($("<option>").attr("value",row._NWPCCID).html(row._Namem));
+  $('#stations').append($('<option>').attr("value",row._NWPCCID).html(row._Namem));
 }
 
+// Close details view
 function closeDetails() {
   $('#details').html('');
   
 }
 
+// Map config & event bindings
 $(document).ready(function() {
   var map = L.map('map', { });
 
-  map.setView([51.505, -0.09], 13);
+  // Center on Idaho, roughly
+  map.setView([44.562138, -115.385450], 6);
 
   L.tileLayer('https://a.tiles.mapbox.com/v3/ezheidtmann.i6nb1fon/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -203,14 +212,17 @@ $(document).ready(function() {
 
   markers = new L.FeatureGroup().addTo(map);
 
+  // Set up underscore templates for dynamic data
   renderBubbleText = _.template($('#tplBubbleText').html());
   renderFacetBlock = _.template($('#tplFacetBlock').html());
   renderDetailsText = _.template($('#tplDetailsText').html());
 
+  // Retrieve power source and geo data
   $.when(
-    $.ajax('http://npc.sqm.io/sets/3/current?format=json') // latlng
-   ,$.ajax('http://npc.sqm.io/sets/1/current?format=json') // "projects"
+    $.ajax('http://npc.sqm.io/sets/3/current?format=json') // geo
+   ,$.ajax('http://npc.sqm.io/sets/1/current?format=json') // power sources info
   ).then(function(geo, demo) {
+    // Populate app data
     var rows = [];
     eachGeoObject(geo[0], demo[0], function(row) {
       if (row._lat && row._lng) {
@@ -224,21 +236,28 @@ $(document).ready(function() {
 
     allRows = rows;
 
+    // Initial marker creation
     redrawMarkers();
 
     $('#stations').chosen();
     
+    // Center on relevant area
     map.fitBounds(markers.getBounds().pad(0.1));
 
+    // When filters change, update map to reflect
     $('#facets').on('change', function() {
       redrawMarkers();
     });
     
+    // Allows search / drilldown to pop up map marker + detail view
     $('#stations').on('change', function(){
-      markerLookup[$('#stations').val()].fire('click').openPopup();
+      if ($('#stations').val() > 0) {
+        markerLookup[$('#stations').val()].fire('click').openPopup();
+      }
     });
     
-    map.on('popupclose', closeDetails);
+    // Needs a different callback?
+    //map.on('popupclose', closeDetails);
   });
   
   
